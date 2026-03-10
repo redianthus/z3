@@ -216,11 +216,12 @@ Z3_ast Z3_ast_plus_raw(Z3_ast_plus * ap) {
 void Z3_ast_finalize(value v) {
   /* printf("--\n"); */
   Z3_ast_plus * ap = (Z3_ast_plus*)(Data_custom_val(v));
-  if (ap->p != NULL)
-    Z3_dec_ref(ap->cp->ctx, ap->p);
+  if (ap->p != NULL) {
+    // Z3_dec_ref(ap->cp->ctx, ap->p);
+  }
   if (atomic_fetch_sub(&ap->cp->obj_count, 1) == 1) {
-    Z3_del_context(ap->cp->ctx);
-    free(ap->cp);
+    // Z3_del_context(ap->cp->ctx);
+    // free(ap->cp);
   }
 }
 
@@ -282,7 +283,7 @@ intnat Z3_ast_hash(value v) {
 
 static struct custom_operations Z3_ast_plus_custom_ops = {
   (char*) "Z3_ast ops",
-  Z3_ast_finalize,
+  custom_finalize_default,
   Z3_ast_compare,
   Z3_ast_hash,
   custom_serialize_default,
